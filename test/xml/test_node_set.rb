@@ -276,6 +276,19 @@ module Nokogiri
         assert_match '<a>', html
       end
 
+      def test_inner_html_nbsp
+        doc = Nokogiri::HTML('<p>&nbsp;</p>')
+        xml_before = doc.at("p").to_xml
+
+        doc.css("p").each do |p|
+          p.inner_html = p.inner_text
+        end
+
+        xml_after = doc.at("p").to_xml
+        assert_equal xml_before, xml_after
+      end
+
+
       def test_at
         assert node_set = @xml.search('//employee')
         assert_equal node_set.first, node_set.at(0)
